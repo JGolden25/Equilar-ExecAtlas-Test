@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchExecutiveData() {
     try {
-        const response = await fetch('mock-api.php');
+        // swapped for js file since vercel doesnt read php files
+        const response = await fetch('/api/executives');
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
