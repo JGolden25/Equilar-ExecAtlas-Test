@@ -4,7 +4,16 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-$apiKey = "hP1aza568kE0IkBNbF8LAL3jNSAaSIsGTtehjZ8gYNH9hqSVdRJftanOP5D82KrBPq4agmbUWNgxAUxVMnhw";
+$apiKey = getenv("EQUILAR_API_KEY");
+if (!$apiKey) {
+    http_response_code(500);
+    echo json_encode([
+        'error' => 'Missing API key',
+        'message' => 'EQUILAR_API_KEY environment variable not set'
+    ]);
+    exit;
+}
+
 $url = "https://execatlas.equilar.com/bsp/profile/publicNewsFeed";
 
 $payload = [
@@ -18,24 +27,11 @@ $payload = [
 
 $ch = curl_init($url);
 
-
 $headers = [
     'Content-Type: application/json',
     'Accept: application/json',
     'X-API-Key: ' . $apiKey
 ];
-
-// $headers = [
-//     'Content-Type: application/json',
-//     'Accept: application/json',
-//     'Authorization: Bearer ' . $apiKey
-// ];
-
-// $headers = [
-//     'Content-Type: application/json',
-//     'Accept: application/json',
-//     'API-Key: ' . $apiKey
-// ];
 
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
@@ -51,9 +47,6 @@ $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $error = curl_error($ch);
 curl_close($ch);
 
-error_log("HTTP Code: " . $httpCode);
-error_log("Response: " . substr($response, 0, 500));
-
 if ($error) {
     http_response_code(500);
     echo json_encode([
@@ -65,7 +58,6 @@ if ($error) {
 
 if ($httpCode !== 200) {
     $errorData = json_decode($response, true);
-    
     http_response_code($httpCode);
     echo json_encode([
         'error' => 'API request failed',
