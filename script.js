@@ -87,9 +87,20 @@ function getSourceLabel(source) {
     return source || 'Unknown Source';
 }
 
+// Date display function following the requirements document
 function getDisplayDate(item) {
-    const preferEffectiveSources = ['COMPANIES_HOUSE', 'CRUNCHBASE', 'PE_INFO'];
+    // Sources that should NOT show any date per requirements
+    const hideDateSources = ['COMPANIES_HOUSE', 'IEI', 'JCATT', 'WEBSITE_CHECKER', 'TAGGER_WEBSITE'];
     
+    // Hide date for specified sources
+    if (hideDateSources.includes(item.source)) {
+        return null;
+    }
+    
+    // For sources that show dates, prefer effectiveDate for these sources
+    const preferEffectiveSources = ['CRUNCHBASE', 'PE_INFO'];
+    
+    // Determine which date to use
     let dateToUse = item.reportedDate;
     if (preferEffectiveSources.includes(item.source) && item.effectiveDate) {
         dateToUse = item.effectiveDate;
@@ -206,6 +217,7 @@ function renderExecutives(executives) {
     content.innerHTML = `<div class="cards-grid">${cardsHtml}</div>`;
 }
 
+// FIXED: Only shows initials when profileImage is null or image fails to load
 function createExecutiveCard(exec) {
     const badgeClass = exec.category === 'departure' ? 'badge-departure' : 'badge-appointment';
     const badgeText = exec.category === 'departure' ? 'Departure' : 'Appointment';
