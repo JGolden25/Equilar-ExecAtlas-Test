@@ -14,7 +14,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Background Shape */
 body::before {
     content: '';
     position: fixed;
@@ -493,5 +492,65 @@ body::after {
 
     .page-title {
         font-size: 28px;
+    }
+}
+
+.filters-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.filter-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e0e7ff;
+    background: white;
+    color: #6366f1;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+    background: #f8fafc;
+    border-color: #c7d2fe;
+}
+
+.filter-btn.active {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
+}
+
+.results-summary {
+    color: #64748b;
+    font-size: 0.9rem;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .filters-section {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .filter-buttons {
+        justify-content: center;
+    }
+    
+    .results-summary {
+        text-align: center;
     }
 }

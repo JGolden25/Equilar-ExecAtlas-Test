@@ -1,9 +1,12 @@
 let allExecutives = [];
 let filteredExecutives = [];
+let currentFilter = 'all';
+let currentSearchQuery = '';
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchExecutiveData();
     setupSearch();
+    setupFilters();
 });
 
 async function fetchExecutiveData() {
@@ -23,10 +26,10 @@ async function fetchExecutiveData() {
         }
         
         allExecutives = transformData(data);
-        filteredExecutives = [...allExecutives];
-        
+        applyFilters();
         updateStats();
         renderExecutives(filteredExecutives);
+        updateResultsSummary();
         
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -111,6 +114,28 @@ function getDisplayDate(item) {
     }
 }
 
+// New filter functionality
+function setupFilters() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            filterButtons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-pressed', 'false');
+            });
+            
+            e.target.classList.add('active');
+            e.target.setAttribute('aria-pressed', 'true');
+            
+            currentFilter = e.target.dataset.filter;
+            applyFilters();
+            renderExecutives(filteredExecutives);
+            updateResultsSummary();
+        });
+    });
+}
+
 // search
 function setupSearch() {
     const searchInput = document.getElementById('searchInput');
@@ -119,24 +144,30 @@ function setupSearch() {
     searchInput.addEventListener('input', (e) => {
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => {
-            performSearch(e.target.value);
+            currentSearchQuery = e.target.value;
+            applyFilters();
+            renderExecutives(filteredExecutives);
+            updateResultsSummary();
         }, 300);
     });
 }
 
-function performSearch(query) {
-    query = query.toLowerCase().trim();
+function applyFilters() {
+    let filtered = [...allExecutives];
     
-    if (!query) {
-        filteredExecutives = [...allExecutives];
-    } else {
-        filteredExecutives = allExecutives.filter(exec => {
+    if (currentSearchQuery.trim()) {
+        const query = currentSearchQuery.toLowerCase().trim();
+        filtered = filtered.filter(exec => {
             return exec.personName.toLowerCase().includes(query) ||
                    exec.company.toLowerCase().includes(query);
         });
     }
     
-    renderExecutives(filteredExecutives);
+    if (currentFilter !== 'all') {
+        filtered = filtered.filter(exec => exec.category === currentFilter);
+    }
+    
+    filteredExecutives = filtered;
 }
 
 function updateStats() {
@@ -149,6 +180,19 @@ function updateStats() {
     document.getElementById('departureCount').textContent = departures;
 }
 
+function updateResultsSummary() {
+    const summaryEl = document.getElementById('resultsSummary');
+    const totalResults = filteredExecutives.length;
+    const totalAll = allExecutives.length;
+    
+    if (currentSearchQuery.trim() || currentFilter !== 'all') {
+        summaryEl.textContent = `${totalResults} of ${totalAll} results`;
+        summaryEl.style.display = 'block';
+    } else {
+        summaryEl.style.display = 'none';
+    }
+}
+
 function renderExecutives(executives) {
     const content = document.getElementById('content');
     
@@ -157,7 +201,7 @@ function renderExecutives(executives) {
             <div class="empty-state">
                 <div class="empty-icon">📊</div>
                 <div class="empty-title">No executives found</div>
-                <div class="empty-subtitle">Try adjusting your search criteria</div>
+                <div class="empty-subtitle">Try adjusting your search criteria or filters</div>
             </div>
         `;
         return;
@@ -173,8 +217,8 @@ function createExecutiveCard(exec) {
     const badgeText = exec.category === 'departure' ? 'Departure' : 'Appointment';
     
     const avatarContent = exec.profileImage 
-        ? `<img src="${exec.profileImage}" alt="${exec.personName}" onerror="this.style.display='none'; this.parentElement.innerHTML='${exec.initials}'">`
-        : exec.initials;
+        ? `<img src="${exec.profileImage}" alt="${exec.personName}" onerror="this.style.display='none'; this.parentElement.innerHTML='<span role=\\"img\\" aria-label=\\"Initials for ${exec.personName}\\">${exec.initials}</span>'">`
+        : `<span role="img" aria-label="Initials for ${exec.personName}">${exec.initials}</span>`;
     
     const dateHtml = exec.displayDate ? `<div class="exec-date">${exec.displayDate}</div>` : '';
     
