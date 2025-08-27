@@ -89,11 +89,6 @@ function getSourceLabel(source) {
 
 function getDisplayDate(item) {
     const preferEffectiveSources = ['COMPANIES_HOUSE', 'CRUNCHBASE', 'PE_INFO'];
-    const hideDateSources = ['COMPANIES_HOUSE', 'IEI', 'JCATT', 'WEBSITE_CHECKER', 'TAGGER_WEBSITE'];
-    
-    if (hideDateSources.includes(item.source)) {
-        return null;
-    }
     
     let dateToUse = item.reportedDate;
     if (preferEffectiveSources.includes(item.source) && item.effectiveDate) {
@@ -211,14 +206,17 @@ function renderExecutives(executives) {
     content.innerHTML = `<div class="cards-grid">${cardsHtml}</div>`;
 }
 
-// executive card
 function createExecutiveCard(exec) {
     const badgeClass = exec.category === 'departure' ? 'badge-departure' : 'badge-appointment';
     const badgeText = exec.category === 'departure' ? 'Departure' : 'Appointment';
     
-    const avatarContent = exec.profileImage 
-        ? `<img src="${exec.profileImage}" alt="${exec.personName}" onerror="this.style.display='none'; this.parentElement.innerHTML='<span role=\\"img\\" aria-label=\\"Initials for ${exec.personName}\\">${exec.initials}</span>'">`
-        : `<span role="img" aria-label="Initials for ${exec.personName}">${exec.initials}</span>`;
+    // Only show initials if there's no profile image
+    let avatarContent;
+    if (exec.profileImage) {
+        avatarContent = `<img src="${exec.profileImage}" alt="${exec.personName}" onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<span role=\\'img\\' aria-label=\\'Initials for ${exec.personName}\\'>${exec.initials}</span>'">`;
+    } else {
+        avatarContent = `<span role="img" aria-label="Initials for ${exec.personName}">${exec.initials}</span>`;
+    }
     
     const dateHtml = exec.displayDate ? `<div class="exec-date">${exec.displayDate}</div>` : '';
     
