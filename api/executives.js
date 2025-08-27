@@ -14,14 +14,14 @@ export default function handler(req, res) {
       "profileImage": null
     },
     {
-      "personName": "Michael Chen",
+      "personName": "Michael Chrome",
       "title": "Chief Financial Officer",
       "org": {"name": "Global Finance Solutions"},
       "eventType": "RESIGNATION",
       "source": "TAGGER",
       "effectiveDate": "2025-08-10",
       "reportedDate": "2025-08-12",
-      "profileImage": null
+      "profileImage": "https://allprodad.com/wp-content/uploads/2021/03/05-12-21-happy-people.jpg"
     },
     {
       "personName": "Emily Rodriguez",
@@ -31,7 +31,7 @@ export default function handler(req, res) {
       "source": "WEBSITE_CHECKER",
       "effectiveDate": "2025-08-01",
       "reportedDate": "2025-08-05",
-      "profileImage": null
+      "profileImage": "https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?cs=srgb&dl=pexels-divinetechygirl-1181690.jpg&fm=jpg"
     },
     {
       "personName": "David Thompson",
@@ -41,7 +41,7 @@ export default function handler(req, res) {
       "source": "PE_INFO",
       "effectiveDate": "2025-07-28",
       "reportedDate": "2025-07-30",
-      "profileImage": null
+      "profileImage": "https://images.unsplash.com/photo-1590086782957-93c06ef21604?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d2hpdGUlMjBndXl8ZW58MHx8MHx8fDA%3D"
     },
     {
       "personName": "Lisa Anderson",
