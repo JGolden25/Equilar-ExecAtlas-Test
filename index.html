@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Directory | Equilar</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <div class="logo">EQUILAR</div>
+                <div class="tagline">Executive Intelligence Platform</div>
+            </div>
+            <div class="header-right">
+                Executive Directory Dashboard
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-header">
+            <h1 class="page-title">Executive Updates</h1>
+            <p class="page-subtitle">Executive movements and appointments from the Equilar ExecAtlas feed</p>
+        </div>
+
+        <div class="search-container">
+            <input 
+                type="text" 
+                class="search-input" 
+                id="searchInput" 
+                placeholder="Search by executive name or company"
+            >
+        </div>
+
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-item">
+                <span class="stat-value" id="totalCount">0</span>
+                <span class="stat-label">Total Updates</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="appointmentCount">0</span>
+                <span class="stat-label">Appointments</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="departureCount">0</span>
+                <span class="stat-label">Departures</span>
+            </div>
+        </div>
+
+        <div id="content">
+            <div class="loading">
+                <div class="spinner"></div>
+                <div class="loading-text">Loading executive updates...</div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
